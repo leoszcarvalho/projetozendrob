@@ -29,28 +29,42 @@ class IndexController extends Zend_Controller_Action
             if ($form->isValid($formData)) 
             {
                 
-                $artist = $form->getValue('artist');
-                $title = $form->getValue('title');
-                $albums = new Application_Model_DbTable_Albums();
-                $albums->addAlbum($artist, $title);
-                
-                //$imagem = $form->getValue('imagem');
-                //$tempFile = $form->getPost('imagem')->getValue();
-                
                 $transferencia = new Zend_File_Transfer_Adapter_Http();
                 $transferencia->setDestination("/var/www/html/projeto-zend-rob/public/images/");
-              
-                  if ($transferencia->receive())
+                
+                  if ($transferencia->receive(array('imagem','arq_texto')))
                   {
-                    print "Arquivo enviado com sucesso!";
+                      $nome_img = $transferencia->getFileName('imagem', false);
+                      $nome_txt = $transferencia->getFileName('arq_texto', false);
+                      
+                      
+                      
+                      $artist = $form->getValue('artist');
+                      $title = $form->getValue('title');
+                      $albums = new Application_Model_DbTable_Albums();
+                      
+                      if($albums->addAlbum($artist, $title) == true)
+                      {
+                      
+                      die("<script>alert('Registro incluído com sucesso'); self.location='../';</script>"
+                         . "<noscript>Registro incluído com sucesso"
+                         . "<meta content='2;url=http://projetozendrob.com/' http-equiv='refresh'></noscript>");
+                      }
+                      else
+                      {
+                         die("<script>alert('Ocorreu um erro na inclusão do registro do banco'); self.location='../';</script>"
+                         . "<noscript>Ocorreu um erro na inclusão do registro do banco"
+                         . "<meta content='2;url=http://projetozendrob.com/' http-equiv='refresh'></noscript>");
+                          
+                      }
+                      
                   }
                   else 
                   {
-                    print "Erro ao enviar arquivo!";
+                    print "Erro ao enviar arquivos, é necessário o envio dos arquivos de texto e imagem";
                   }
                 
-
-//$this->_helper->redirector('index');
+                
             } 
             else 
             {

@@ -35,8 +35,14 @@ class Application_Model_DbTable_Albums extends Zend_Db_Table_Abstract
         'title' => $title,
         );
  
-        $this->insert($data);
-    
+        if($this->insert($data))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
         
     }
 
