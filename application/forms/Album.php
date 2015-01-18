@@ -37,9 +37,12 @@ class Application_Form_Album extends Zend_Form
         
         //$validaTamanho->isValid($title);
         
+        $arquivo_img = new Zend_Form_Element_File('imagem');
+        $arquivo_img->setLabel('Imagem');
+        
         $submit = new Zend_Form_Element_Submit('submit');
         $submit->setAttrib('id', 'submitbutton');
-        $this->addElements(array($id, $artist, $title, $submit));
+        $this->addElements(array($id, $artist, $title, $arquivo_img, $submit));
  
         
     }

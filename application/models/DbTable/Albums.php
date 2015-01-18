@@ -13,10 +13,19 @@ class Application_Model_DbTable_Albums extends Zend_Db_Table_Abstract
         
         if (!$row) 
         {
-            throw new Exception("Could not find row $id");
+            //throw new Exception("Could not find row $id");
+            
+        return false;        
+            
         }
+        else
+        {
         
         return $row->toArray();
+        
+        
+        }
+        
     }
 
     public function addAlbum($artist, $title)

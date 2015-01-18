@@ -33,8 +33,24 @@ class IndexController extends Zend_Controller_Action
                 $title = $form->getValue('title');
                 $albums = new Application_Model_DbTable_Albums();
                 $albums->addAlbum($artist, $title);
+                
+                //$imagem = $form->getValue('imagem');
+                //$tempFile = $form->getPost('imagem')->getValue();
+                
+                $transferencia = new Zend_File_Transfer_Adapter_Http();
+                $transferencia->setDestination("/var/www/html/projeto-zend-rob/public/images/");
+              
+                  if ($transferencia->receive())
+                  {
+                    print "Arquivo enviado com sucesso!";
+                  }
+                  else 
+                  {
+                    print "Erro ao enviar arquivo!";
+                  }
+                
 
-                $this->_helper->redirector('index');
+//$this->_helper->redirector('index');
             } 
             else 
             {
@@ -45,6 +61,8 @@ class IndexController extends Zend_Controller_Action
 
     public function editAction()
     {
+        
+        
        $form = new Application_Form_Album();
        $form->submit->setLabel('Save');
        
@@ -78,9 +96,20 @@ class IndexController extends Zend_Controller_Action
             if ($id > 0) 
             {
                 $albums = new Application_Model_DbTable_Albums();
-            $form->populate($albums->getAlbum($id));
-            
-            
+
+                if($albums->getAlbum($id) != false)
+                {
+                
+                $form->populate($albums->getAlbum($id));
+                
+                }
+                else 
+                {
+                    
+                    $this->_helper->redirector('index');
+
+                }
+                
             }
         }
     }
