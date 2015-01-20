@@ -30,7 +30,7 @@ class IndexController extends Zend_Controller_Action
             {
                 
                 $transferencia = new Zend_File_Transfer_Adapter_Http();
-                $transferencia->setDestination("/var/www/html/projeto-zend-rob/public/images/");
+                $transferencia->setDestination("../public/images/");
                 
                   if ($transferencia->receive(array('imagem','arq_texto')))
                   {
