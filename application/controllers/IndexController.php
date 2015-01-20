@@ -13,8 +13,9 @@ class IndexController extends Zend_Controller_Action
         $albums = new Application_Model_DbTable_Albums();
         $this->view->albums = $albums->fetchAll();
         
-        
-        
+        $VarSessao = new Zend_Session_Namespace('NovaSessao');
+        echo $VarSessao->user;
+    
     }
 
     public function addAction()

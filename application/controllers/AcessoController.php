@@ -33,7 +33,7 @@ class AcessoController extends Zend_Controller_Action
                             
                             $VarSessao->user = $login;
                             
-                            die("<script>alert('Bem Vindo $login!'); self.location='../';</script>"
+                            die("<script>alert('Bem Vindo $login!'); self.location='acesso/logout';</script>"
                              . "<noscript>Bem Vindo $login"
                              . "<meta content='2;url=http://projetozendrob.com/' http-equiv='refresh'></noscript>");
                       }
