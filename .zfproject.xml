@@ -13,10 +13,14 @@
           <actionMethod actionName="edit"/>
           <actionMethod actionName="delete"/>
         </controllerFile>
+        <controllerFile controllerName="Acesso">
+          <actionMethod actionName="index"/>
+        </controllerFile>
         <controllerFile controllerName="Error"/>
       </controllersDirectory>
       <formsDirectory>
         <formFile formName="Album"/>
+        <formFile formName="Acesso"/>
       </formsDirectory>
       <layoutsDirectory>
         <layoutScriptsDirectory>
@@ -26,6 +30,7 @@
       <modelsDirectory>
         <dbTableDirectory>
           <dbTableFile dbTableName="Albums"/>
+          <dbTableFile dbTableName="Usuarios"/>
         </dbTableDirectory>
       </modelsDirectory>
       <modulesDirectory enabled="false"/>
