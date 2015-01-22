@@ -35,3 +35,6 @@ form dd {
 form #submitbutton {
  margin-left: 100px;
 }
+
+input,td 
+{vertical-align: top;}

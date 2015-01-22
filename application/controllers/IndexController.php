@@ -6,15 +6,25 @@ class IndexController extends Zend_Controller_Action
     public function init()
     {
         /* Initialize action controller here */
+        //Modo básico de se fazer um controle de acesso com sessão dos usuários
+        
+        $VarSessao = new Zend_Session_Namespace('NovaSessao');
+
+        if(!isset($VarSessao->user))
+        {
+            $this->redirect('acesso');
+        }
+         
     }
 
     public function indexAction()
     {
+        
+        
         $albums = new Application_Model_DbTable_Albums();
         $this->view->albums = $albums->fetchAll();
         
-        $VarSessao = new Zend_Session_Namespace('NovaSessao');
-        echo $VarSessao->user;
+        
     
     }
 
@@ -33,40 +43,61 @@ class IndexController extends Zend_Controller_Action
             if ($form->isValid($formData)) 
             {
                 
-                $transferencia = new Zend_File_Transfer_Adapter_Http();
-                $transferencia->setDestination("../public/images/");
                 
-                  if ($transferencia->receive(array('imagem','arq_texto')))
-                  {
-                      $nome_img = $transferencia->getFileName('imagem', false);
-                      $nome_txt = $transferencia->getFileName('arq_texto', false);
-                      
-                      
-                      
-                      $artist = $form->getValue('artist');
-                      $title = $form->getValue('title');
-                      $albums = new Application_Model_DbTable_Albums();
-                      
-                      if($albums->addAlbum($artist, $title) == true)
-                      {
-                      
+                $transferencia = new Zend_File_Transfer_Adapter_Http();
+                
+                
+                $nome_img = $transferencia->getFileName('imagem', false);
+                $nome_txt = $transferencia->getFileName('arq_texto', false);
+                
+                //Checa se o usuário fez o upload dos arquivos
+                if(!is_array($nome_img) && !is_array($nome_txt)) 
+                {
+                    //Tranferência dos arquivos e renomeação precisa ser de um a um devido 
+                    //ao bug do próprio Zend que n permite a adição de multiplos arquivos renomeados
+                    
+                    $nome_img_real = time()."-+-".$nome_img;
+                    $nome_txt_real = time()."-+-".$nome_txt;
+                    
+                    //Transferência de imagem
+                    $transferencia->addFilter('Rename', array('target' => '../public/images/'.$nome_img_real, 'overwrite' => true));
+
+                    $transferencia->receive('imagem');
+                    
+                    //Transferência de texto
+                    $transferencia->addFilter('Rename', array('target' => '../public/images/'.$nome_txt_real, 'overwrite' => true));
+
+                    $transferencia->receive('arq_texto');
+
+
+                    $artist = $form->getValue('artist');
+                    $title = $form->getValue('title');
+
+                    $albums = new Application_Model_DbTable_Albums();
+
+                    if($albums->addAlbum($artist, $title,$nome_txt_real,$nome_img_real) == true)
+                    {
+
                       die("<script>alert('Registro incluído com sucesso'); self.location='../';</script>"
-                         . "<noscript>Registro incluído com sucesso"
-                         . "<meta content='2;url=http://projetozendrob.com/' http-equiv='refresh'></noscript>");
-                      }
-                      else
-                      {
-                         die("<script>alert('Ocorreu um erro na inclusão do registro do banco'); self.location='../';</script>"
-                         . "<noscript>Ocorreu um erro na inclusão do registro do banco"
-                         . "<meta content='2;url=http://projetozendrob.com/' http-equiv='refresh'></noscript>");
-                          
-                      }
-                      
-                  }
-                  else 
-                  {
-                    print "Erro ao enviar arquivos, é necessário o envio dos arquivos de texto e imagem";
-                  }
+                      . "<noscript>Registro incluído com sucesso"
+                      . "<meta content='2;url=../' http-equiv='refresh'></noscript>");
+                    }
+                    else
+                    {
+                      die("<script>alert('Ocorreu um erro na inclusão do registro do banco'); self.location='../';</script>"
+                      . "<noscript>Ocorreu um erro na inclusão do registro do banco"
+                      . "<meta content='2;url=../' http-equiv='refresh'></noscript>");
+
+                    }
+                
+                }
+                else
+                {
+                    
+                    print "É necessários subir os arquivos de texto e imagem";
+                    
+                }
+                
                 
                 
             } 
@@ -92,13 +123,114 @@ class IndexController extends Zend_Controller_Action
             
             if ($form->isValid($formData)) 
             {
+                //Instancia classe aqui já pra fazer o select dos arquivos se tiverem sido modificados
+                $albums = new Application_Model_DbTable_Albums();
+                
                 $id = (int)$form->getValue('id');
                 $artist = $form->getValue('artist');
                 $title = $form->getValue('title');
-                $albums = new Application_Model_DbTable_Albums();
+
+                
+                $transferencia = new Zend_File_Transfer_Adapter_Http();
+                $transferencia->setDestination("../public/images/");
+                
+                $nome_img = $transferencia->getFileName('imagem', false);
+                $nome_txt = $transferencia->getFileName('arq_texto', false);
+                   
+                $row = $albums->selectAlbum($id);
+                
+                
+                
+                //Verifica se os arquivos foram enviados
+                if(!is_array($nome_img)) 
+                {
+                    
+                    //echo '../public/images/'.$row->arq_imagem;
+                    //die();
+                      
+                    if(unlink('../public/images/'.$row->arq_imagem))
+                    {
+                            //echo 'Arquivo antigo deletado com sucesso';
+                            //die();
+                            if($transferencia->receive('imagem'))
+                            {
+                                //echo "- Novo Arquivo gravado com sucesso";
+                                //die(); 
+                                
+                                if($albums->updateImagem($id, $nome_img) == true)
+                                {
+                                    //echo "- BD atualizado com sucesso";
+                                    //die();
+                                }
+                                else
+                                {
+                                    
+                                    die("Ocorreu um erro na atualização da imagem no BD");
+                                    
+                                }
+                                
+                            }
+                            else
+                            {
+                                
+                                die("Ocorreu um erro no recebimento da imagem");
+
+                                
+                            }
+                    }
+                    else 
+                    {
+                        die("Ocorreu um erro ao tentar deletar a imagem antiga");
+                    }
+                    
+                }
+                
+                if(!is_array($nome_txt)) 
+                {
+                    
+                    //echo '../public/images/'.$row->arq_imagem;
+                    //die();
+                      
+                    if(unlink('../public/images/'.$row->arq_texto))
+                    {
+                            //echo 'Arquivo antigo deletado com sucesso';
+                            //die();
+                            if($transferencia->receive('arq_texto'))
+                            {
+                                //echo "- Novo Arquivo gravado com sucesso";
+                                //die(); 
+                                
+                                if($albums->updateTxt($id, $nome_txt) == true)
+                                {
+                                    //echo "- BD atualizado com sucesso";
+                                    //die();
+                                }
+                                else
+                                {
+                                    die("Ocorreu um erro na atualização do arquivo de texto no BD");
+                                }
+                                
+                            }
+                            else
+                            {
+                                die("Ocorreu um erro no recebimento do arquivo de texto");
+                            }
+                    }
+                    else
+                    {
+                        
+                        die("Ocorreu um erro ao tentar deletar o arquivo de texto antigo");
+      
+                    }
+                    
+                }
+                
+                
                 $albums->updateAlbum($id, $artist, $title);
 
-                 $this->_helper->redirector('index');
+                $this->_helper->redirector('index');
+            
+              
             } 
             else 
             {
@@ -157,15 +289,7 @@ class IndexController extends Zend_Controller_Action
         
     }
 
-    public function alalalaAction()
-    {
-        // action body
-    }
-
-    public function tasteAction()
-    {
-        // action body
-    }
+  
 
 
 }

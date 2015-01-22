@@ -1,5 +1,34 @@
 <?php
 $this->title = "Edit album";
 $this->headTitle($this->title);
-echo $this->form ;
 ?>
+
+<form enctype="multipart/form-data" method="post" action>
+    <?php echo $this->form->id;?>
+    <table>
+        <tr>
+            <td>Artista:</td>
+            <td><?php echo $this->form->artist; ?></td>
+        </tr>
+        <tr>
+            <td>Título:</td>
+            <td><?php echo $this->form->title; ?></td>
+        </tr>
+        <tr>
+            <td>Imagem:</td>
+            <td><?php echo $this->form->imagem; ?></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Arquivo Txt:</td>
+            <td><?php echo $this->form->arq_texto; ?></td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td><?php echo $this->form->submit; ?></td>
+        </tr>
+    </table>
+</form>

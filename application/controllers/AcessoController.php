@@ -33,9 +33,9 @@ class AcessoController extends Zend_Controller_Action
                             
                             $VarSessao->user = $login;
                             
-                            die("<script>alert('Bem Vindo $login!'); self.location='acesso/logout';</script>"
+                            die("<script>alert('Bem Vindo $login!'); self.location='../index';</script>"
                              . "<noscript>Bem Vindo $login"
-                             . "<meta content='2;url=http://projetozendrob.com/' http-equiv='refresh'></noscript>");
+                             . "<meta content='2;url=../index' http-equiv='refresh'></noscript>");
                       }
                       else
                       {
@@ -50,6 +50,16 @@ class AcessoController extends Zend_Controller_Action
     public function logoutAction()
     {
         // action body
+        $VarSessao = new Zend_Session_Namespace('NovaSessao');
+    
+        //Deleta apenas as sessões especificadas
+        Zend_Session::namespaceUnset('NovaSessao');
+    
+        //Deleta todas as sessões
+        //Zend_Session::destroy(true);
+        
+        $this->redirect('/');
+        
     }
 
 

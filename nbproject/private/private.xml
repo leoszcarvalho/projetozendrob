@@ -3,7 +3,15 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/xampp/htdocs/projetozendrob/application/controllers/AcessoController.php</file>
+            <file>file:/var/www/html/projeto-zend-rob/application/views/scripts/index/index.phtml</file>
+            <file>file:/var/www/html/projeto-zend-rob/application/forms/Album.php</file>
+            <file>file:/var/www/html/projeto-zend-rob/application/views/scripts/index/add.phtml</file>
+            <file>file:/var/www/html/projeto-zend-rob/application/views/scripts/index/teste.php</file>
+            <file>file:/var/www/html/projeto-zend-rob/application/controllers/IndexController.php</file>
+            <file>file:/var/www/html/projeto-zend-rob/library/Zend/Form/Decorator/Image.php</file>
+            <file>file:/var/www/html/projeto-zend-rob/library/Zend/View/Interface.php</file>
+            <file>file:/var/www/html/projeto-zend-rob/application/models/DbTable/Albums.php</file>
+            <file>file:/var/www/html/projeto-zend-rob/application/views/scripts/index/edit.phtml</file>
         </group>
     </open-files>
 </project-private>
