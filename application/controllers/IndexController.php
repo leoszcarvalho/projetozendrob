@@ -116,17 +116,29 @@ class IndexController extends Zend_Controller_Action
        $form->submit->setLabel('Save');
        
        $this->view->form = $form;
-
+       
+       $id = (int)$this->_getParam('id', 0);
+       
+       
+       //Instancia classe aqui já pra fazer o select dos arquivos se tiverem sido modificados
+       $albums = new Application_Model_DbTable_Albums();
+       
+       $img = $albums->selectAlbum($id);
+       
+       $this->view->imagem = $img->arq_imagem;
+       
+       
        if ($this->getRequest()->isPost()) 
        {
             $formData = $this->getRequest()->getPost();
             
+            
             if ($form->isValid($formData)) 
             {
-                //Instancia classe aqui já pra fazer o select dos arquivos se tiverem sido modificados
-                $albums = new Application_Model_DbTable_Albums();
+                
                 
                 $id = (int)$form->getValue('id');
+                
                 $artist = $form->getValue('artist');
                 $title = $form->getValue('title');
 

@@ -1,6 +1,7 @@
 <?php
 $this->title = "Edit album";
 $this->headTitle($this->title);
+
 ?>
 
 <form enctype="multipart/form-data" method="post" action>
@@ -19,8 +20,8 @@ $this->headTitle($this->title);
             <td><?php echo $this->form->imagem; ?></td>
         </tr>
         <tr>
-            <td></td>
-            <td></td>
+            <td>&nbsp;</td>
+            <td><img src="../../../images/<?php  echo $this->imagem; ?>"></td>
         </tr>
         <tr>
             <td>Arquivo Txt:</td>
