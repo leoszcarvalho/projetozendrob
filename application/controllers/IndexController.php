@@ -8,12 +8,12 @@ class IndexController extends Zend_Controller_Action
         /* Initialize action controller here */
         //Modo básico de se fazer um controle de acesso com sessão dos usuários
         
-        $VarSessao = new Zend_Session_Namespace('NovaSessao');
+       /* $VarSessao = new Zend_Session_Namespace('NovaSessao');
 
         if(!isset($VarSessao->user))
         {
             $this->redirect('acesso');
-        }
+        }*/
          
     }
 
@@ -27,6 +27,8 @@ class IndexController extends Zend_Controller_Action
         
     
     }
+    
+    
 
     public function addAction()
     {
