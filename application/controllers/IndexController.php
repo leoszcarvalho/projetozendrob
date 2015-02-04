@@ -21,14 +21,39 @@ class IndexController extends Zend_Controller_Action
     {
         
         
-        $albums = new Application_Model_DbTable_Albums();
-        $this->view->albums = $albums->fetchAll();
+        $albumsList = new Model_ListAlbums();
+        $albumsList = $albumsList->listAlbums();
+//die();
+
         
+        $paginator = new Zend_Paginator(new Zend_Paginator_Adapter_DbSelect($albumsList));
+        $paginator->setItemCountPerPage(10)
+                ->setCurrentPageNumber($this->getParam('page',1));
         
+        $this->view->paginator = $paginator;
+        
+       // echo $this->getParam('page');
     
     }
     
+    public function listAction()
+    {
+        
+        
+        $albumsList = new Model_ListAlbums();
+        $albumsList = $albumsList->listAlbums();
+//die();
+
+        
+        $paginator = new Zend_Paginator(new Zend_Paginator_Adapter_DbSelect($albumsList));
+        $paginator->setItemCountPerPage(10)
+                ->setCurrentPageNumber($this->getParam('page',1));
+        
+        $this->view->paginator = $paginator;
+        
+       // echo $this->getParam('page');
     
+    } 
 
     public function addAction()
     {
