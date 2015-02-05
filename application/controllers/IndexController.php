@@ -32,6 +32,8 @@ class IndexController extends Zend_Controller_Action
         
         $this->view->paginator = $paginator;
         
+        echo "Alt em v1.0";
+        
        // echo $this->getParam('page');
     
     }
