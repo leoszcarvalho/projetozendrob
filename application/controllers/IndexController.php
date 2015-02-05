@@ -24,7 +24,7 @@ class IndexController extends Zend_Controller_Action
         $albums = new Application_Model_DbTable_Albums();
         $this->view->albums = $albums->fetchAll();
         
-        
+        echo "Ramificação teste";
     
     }
 
