@@ -32,7 +32,6 @@ class IndexController extends Zend_Controller_Action
         
         $this->view->paginator = $paginator;
         
-        echo "L v";
         
        // echo $this->getParam('page');
     
