@@ -12,6 +12,7 @@
           <actionMethod actionName="add"/>
           <actionMethod actionName="edit"/>
           <actionMethod actionName="delete"/>
+          <actionMethod actionName="pdf"/>
         </controllerFile>
         <controllerFile controllerName="Acesso">
           <actionMethod actionName="index"/>
@@ -51,6 +52,9 @@
           </viewControllerScriptsDirectory>
           <viewControllerScriptsDirectory forControllerName="Index">
             <viewScriptFile forActionName="delete"/>
+          </viewControllerScriptsDirectory>
+          <viewControllerScriptsDirectory forControllerName="Index">
+            <viewScriptFile forActionName="pdf"/>
           </viewControllerScriptsDirectory>
         </viewScriptsDirectory>
         <viewHelpersDirectory/>

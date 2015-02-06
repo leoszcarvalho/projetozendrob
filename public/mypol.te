@@ -3,7 +3,6 @@ module mypol 1.0;
 
 require {
 	type httpd_t;
-	type default_t;
 	type httpd_sys_content_t;
 	type avahi_t;
 	class dbus send_msg;
@@ -12,11 +11,8 @@ require {
 
 #============= httpd_t ==============
 
-#!!!! This avc is allowed in the current policy
+#!!!! This avc can be allowed using the boolean 'httpd_dbus_avahi'
 allow httpd_t avahi_t:dbus send_msg;
 
-#!!!! This avc is allowed in the current policy
-allow httpd_t default_t:dir write;
-
-#!!!! This avc is allowed in the current policy
+#!!!! This avc can be allowed using the boolean 'httpd_unified'
 allow httpd_t httpd_sys_content_t:dir write;

@@ -22,21 +22,27 @@ class IndexController extends Zend_Controller_Action
         
         
         $albumsList = new Model_ListAlbums();
-        $albumsList = $albumsList->listAlbums();
+        $lista = $albumsList->listAlbums();
 //die();
 
         
-        $paginator = new Zend_Paginator(new Zend_Paginator_Adapter_DbSelect($albumsList));
+        $paginator = new Zend_Paginator(new Zend_Paginator_Adapter_DbSelect($lista));
         $paginator->setItemCountPerPage(10)
                 ->setCurrentPageNumber($this->getParam('page',1));
         
         $this->view->paginator = $paginator;
         
         
+        /*UTILIZAÇÃO DE SELECT PURO -> obs: listagem na index é a mesma só tem q mudar a var de paginacao para querylivre
+        $queryAlbums = $albumsList->listasqlAlbums();
+        
+        $this->view->querylivre = $queryAlbums;
+        */
+        
        // echo $this->getParam('page');
     
     }
-    
+
     public function listAction()
     {
         
@@ -54,7 +60,7 @@ class IndexController extends Zend_Controller_Action
         
        // echo $this->getParam('page');
     
-    } 
+    }
 
     public function addAction()
     {
@@ -329,10 +335,67 @@ class IndexController extends Zend_Controller_Action
         
     }
 
-  
+    public function pdfAction()
+    {
+       
+    //Visualizar o PDF na Tela
+    //====================================================================================
+    //====================================================================================
+    /* $this->_helper->viewRenderer->setNoRender();
+    $this->_helper->layout()->disableLayout();
+        
+    $this->getResponse()
+        ->setHeader('Content-type', 'application/pdf');
+    $pdf = Zend_Pdf::load('../public/images/teste.pdf');
+    echo $pdf->render();
+      */ 
+    //====================================================================================
+    
+    //Criar documento PDF e exibir no final
+    //Mais info http://www.ibm.com/developerworks/br/library/os-php-zend5/#ibm-pcon
+    
+    $pdf = new Zend_Pdf();
+    
+    $page = new Zend_Pdf_Page(Zend_Pdf_Page::SIZE_A4);
+    $pageHeight = $page->getHeight();
+    $pageWidth = $page->getWidth();
+    
+    $topPos = $pageHeight - 36;
+    $leftPos = 36;
+    $bottomPos = 30;
+    $rightPos = 0;
+    
+    $style = new Zend_Pdf_Style();
+    $style->setLineColor(new Zend_Pdf_Color_RGB(0.9, 0, 0));
+    $style->setFillColor(new Zend_Pdf_Color_GrayScale(0.2));
+    $style->setLineWidth(3);
+    $style->setFont(new Zend_Pdf_Resource_Font_Simple_Standard_Courier(), 32);
+    
+    
+    $page->setStyle($style);
+    
+    $texto = "Teste! aaaa asiodsad saidaisd asindisad saoidnsoaid asidmsaoid "
+            . "asoidmsaodi asdmasod asmdioi sdaidmasid asoimdas ds";
+    
+    $page->drawText($texto, $rightPos, $topPos);
+
+    $pdf->pages[0] = ($page);
+    
+    $pdf->save("../public/images/alala.pdf");    
+    
+    $this->_helper->viewRenderer->setNoRender();
+    $this->_helper->layout()->disableLayout();
+     $this->getResponse()
+        ->setHeader('Content-type', 'application/pdf');
+    $pdf = Zend_Pdf::load('../public/images/alala.pdf');
+    echo $pdf->render();
+    
+    }
 
 
 }
+
+
 
 
 
