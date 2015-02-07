@@ -7,12 +7,23 @@ echo $this->doctype(); ?>
 <head>
  <?php echo $this->headMeta(); ?>
  <?php echo $this->headTitle(); ?>
- <?php echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/site.css'); ?>
+ <?php echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/site.css'); 
+ 
+ if($this->url() == '/')
+ {
+ echo $this->jQuery();
+ }
+ 
+ ?>
+    
 </head>
 <body>
 <div id="content">
- <h1><?php echo $this->escape($this->title); ?></h1>
- <?php echo $this->layout()->content; ?>
+ <h1>
+ <?php echo $this->escape($this->title); ?></h1>
+ <?php echo $this->layout()->content; 
+ 
+ ?>
 </div>
 </body>
 </html>

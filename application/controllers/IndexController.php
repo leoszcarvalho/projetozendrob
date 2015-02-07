@@ -16,22 +16,52 @@ class IndexController extends Zend_Controller_Action
         }*/
          
     }
+    
+   
 
     public function indexAction()
     {
         
         
         $albumsList = new Model_ListAlbums();
+        //Variável lista retorna o select real no echo
         $lista = $albumsList->listAlbums();
 //die();
-
         
-        $paginator = new Zend_Paginator(new Zend_Paginator_Adapter_DbSelect($lista));
+        
+        
+        $adapter = new Zend_Paginator_Adapter_DbSelect($lista);
+        $paginator = new Zend_Paginator($adapter);
+        
+        
+        //JQuery
+        /*Coloca resultados em um array caso seja utilizado um autocomplete
+        foreach($paginator as $alb)
+        {
+            $array[] = $alb['artist'];
+        }
+        */
+        
+        //Conta número de resultados
+        //echo count($adapter);
+        
+        
         $paginator->setItemCountPerPage(10)
                 ->setCurrentPageNumber($this->getParam('page',1));
         
         $this->view->paginator = $paginator;
         
+        //JQuery
+        /*Cria o campo para utilizar de autocomplete no JQuery
+        $emt = new ZendX_JQuery_Form_Element_AutoComplete('ac');
+        $emt->setJQueryParam('data', $array)
+        ->removeDecorator('label')
+        ->removeDecorator('HtmlTag');
+        
+        $this->view->autocompleteElement = $emt;
+        */
+        
+        //=================================================================================================================
         
         /*UTILIZAÇÃO DE SELECT PURO -> obs: listagem na index é a mesma só tem q mudar a var de paginacao para querylivre
         $queryAlbums = $albumsList->listasqlAlbums();
